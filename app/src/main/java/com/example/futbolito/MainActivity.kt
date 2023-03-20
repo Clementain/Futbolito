@@ -1,9 +1,8 @@
 package com.example.futbolito
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -12,6 +11,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 
 private var ancho: Int? = null
@@ -63,6 +63,18 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        // Ocultar la barra de título
+        supportActionBar?.hide()
+
+        // Establecer la vista de la actividad en pantalla completa
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+
+        // Establecer el contenido de la actividad
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -172,11 +184,23 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
         pincel.color = Color.RED
     }
 
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         //canvas!!.drawLine(200F, 200F, 500F, 200F, pincel)
         canvas!!.drawCircle(xPos, yPos, radio, pincel)
         //canvas.drawText("Este es un texto dibujado", 400F, 400F, pincel)
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.fubol)
+
+        val canvasRect = Rect(0, 0, ancho!!, altura!!)
+        val bitmapRect = RectF(0f, 0f, bitmap.width.toFloat(), bitmap.height.toFloat())
+        bitmapRect.offsetTo(
+            canvasRect.centerX() - bitmapRect.width() / 2,
+            canvasRect.centerY() - bitmapRect.height() / 2
+        )
+        bitmapRect.round(bitmapRect)
+        canvas.drawBitmap(bitmap, null, canvasRect, null)
+        canvas.drawCircle(xPos, yPos, radio, pincel)
 
         invalidate()
     }
@@ -251,4 +275,8 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
         //TODO("Not yet implemented")
     }
 
+}
+
+private fun RectF.round(bitmapRect: RectF) {
+    //TODO("Not yet implemented")
 }
