@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 private var ancho: Int? = null
 private var altura: Int? = null
+private var e1: Int = 0
+private var e2: Int = 0
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -169,19 +171,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
 
     var xPos = ancho!! / 2f
+    var yPos = altura!! / 2f
     var xAcceleration: Float = 0f
     var xVelocity: Float = 0.0f
-    var yPos = altura!! / 2f
     var yAcceleration: Float = 0f
     var yVelocity: Float = 0.0f
     var radio = 50f
 
     var pincel = Paint()
+    var pincel2 = Paint()
     private var gravity = FloatArray(3)
     private var linear_acceleration = FloatArray(3)
 
     init {
         pincel.color = Color.RED
+        pincel2.color = Color.BLACK
+        pincel2.textSize = 50f
     }
 
     @SuppressLint("DrawAllocation")
@@ -201,6 +206,7 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
         bitmapRect.round(bitmapRect)
         canvas.drawBitmap(bitmap, null, canvasRect, null)
         canvas.drawCircle(xPos, yPos, radio, pincel)
+        canvas.drawText("$e1:$e2", ancho!! / 2f, altura!! / 2f, pincel2)
 
         invalidate()
     }
@@ -238,6 +244,7 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
         yAcceleration = yOrientation
         updateX()
         updateY()
+        gol()
 
     }
 
@@ -271,6 +278,20 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
         }
     }
 
+    fun gol() {
+        if ((yPos >= altura!! - radio * 2 && xPos >= ancho!! / 2f + 50) || (yPos >= altura!! - radio * 2 && xPos >= ancho!! / 2f - 50)) {
+            e1++
+            xPos = ancho!! / 2f
+            yPos = altura!! / 2f
+        }
+
+        if ((yPos <= 0 + radio * 2 && xPos >= ancho!! / 2f + 50) || (yPos <= 0 + radio * 2 && xPos >= ancho!! / 2f - 50)) {
+            e2++
+            xPos = ancho!! / 2f
+            yPos = altura!! / 2f
+        }
+    }
+
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
         //TODO("Not yet implemented")
     }
@@ -278,5 +299,5 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
 }
 
 private fun RectF.round(bitmapRect: RectF) {
-    //TODO("Not yet implemented")
+
 }
