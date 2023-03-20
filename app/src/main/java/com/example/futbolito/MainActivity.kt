@@ -218,24 +218,32 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
     }
 
     fun updateX() {
-        if (xPos < ancho!! - radio && xPos > 0 + radio) {
+        if (xPos < ancho!! - radio * 2 && xPos > 0 + radio * 2) {
             xVelocity -= xAcceleration * 3f
             xPos += xVelocity
-        } else if (xPos >= ancho!! - radio) {
-            xPos -= radio + 1
-        } else if (xPos <= 0 + radio) {
-            xPos += radio + 1
+        } else if (xPos >= ancho!! - radio * 2) {
+            xPos = ancho!! - radio * 2 + 1
+            xVelocity -= xAcceleration * 3f
+            xPos += xVelocity
+        } else if (xPos <= 0 + radio * 2) {
+            xPos = radio * 2 + 1
+            xVelocity -= xAcceleration * 3f
+            xPos += xVelocity
         }
     }
 
     fun updateY() {
-        if (yPos < altura!! - radio && yPos > 0 + radio) {
+        if (yPos < altura!! - radio * 2 && yPos > 0 + radio * 2) {
             yVelocity -= yAcceleration * 3f
             yPos += yVelocity
-        } else if (yPos >= altura!! - radio) {
-            yPos -= radio + 1
-        } else if (yPos <= 0 + radio) {
-            yPos += radio + 1
+        } else if (yPos >= altura!! - radio * 2) {
+            yPos = altura!! - radio * 2 + 1
+            yVelocity -= yAcceleration * 3f
+            yPos += yVelocity
+        } else if (yPos <= 0 + radio * 2) {
+            yPos = radio * 2 + 1
+            yVelocity -= yAcceleration * 3f
+            yPos += yVelocity
         }
     }
 
