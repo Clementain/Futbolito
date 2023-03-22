@@ -178,13 +178,18 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
     var yVelocity: Float = 0.0f
     var radio = 50f
 
+    val bitmap = BitmapFactory.decodeResource(resources, R.drawable.fubol)
+
+    val canvasRect = Rect(0, 0, ancho!!, altura!!)
+    val bitmapRect = RectF(0f, 0f, bitmap.width.toFloat(), bitmap.height.toFloat())
+
     var pincel = Paint()
     var pincel2 = Paint()
     private var gravity = FloatArray(3)
     private var linear_acceleration = FloatArray(3)
 
     init {
-        pincel.color = Color.RED
+        pincel.color = Color.WHITE
         pincel2.color = Color.BLACK
         pincel2.textSize = 50f
     }
@@ -195,15 +200,12 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
         //canvas!!.drawLine(200F, 200F, 500F, 200F, pincel)
         canvas!!.drawCircle(xPos, yPos, radio, pincel)
         //canvas.drawText("Este es un texto dibujado", 400F, 400F, pincel)
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.fubol)
 
-        val canvasRect = Rect(0, 0, ancho!!, altura!!)
-        val bitmapRect = RectF(0f, 0f, bitmap.width.toFloat(), bitmap.height.toFloat())
         bitmapRect.offsetTo(
             canvasRect.centerX() - bitmapRect.width() / 2,
             canvasRect.centerY() - bitmapRect.height() / 2
         )
-        bitmapRect.round(bitmapRect)
+
         canvas.drawBitmap(bitmap, null, canvasRect, null)
         canvas.drawCircle(xPos, yPos, radio, pincel)
         canvas.drawText("$e1:$e2", ancho!! / 2f, altura!! / 2f, pincel2)
@@ -279,18 +281,19 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
     }
 
     fun gol() {
-        if ((yPos >= altura!! - radio * 2 && xPos >= ancho!! / 2f + 50) || (yPos >= altura!! - radio * 2 && xPos >= ancho!! / 2f - 50)) {
+        if (yPos >= altura!! - radio * 2 && (xPos <= ancho!! / 2f + 50 && xPos >= ancho!! / 2f - 50)) {
             e1++
             xPos = ancho!! / 2f
             yPos = altura!! / 2f
         }
 
-        if ((yPos <= 0 + radio * 2 && xPos >= ancho!! / 2f + 50) || (yPos <= 0 + radio * 2 && xPos >= ancho!! / 2f - 50)) {
+        if (yPos <= 0 + radio * 2 && (xPos <= ancho!! / 2f + 50 && xPos >= ancho!! / 2f - 50)) {
             e2++
             xPos = ancho!! / 2f
             yPos = altura!! / 2f
         }
     }
+
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
         //TODO("Not yet implemented")
@@ -298,6 +301,3 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
 
 }
 
-private fun RectF.round(bitmapRect: RectF) {
-
-}
