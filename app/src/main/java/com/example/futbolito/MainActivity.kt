@@ -19,27 +19,11 @@ private var e1: Int = 0
 private var e2: Int = 0
 
 @Suppress("DEPRECATION")
-class MainActivity : AppCompatActivity(), SensorEventListener {
+class MainActivity : AppCompatActivity() {
     private var sensorAcelerometer: Sensor? = null
     private var mSensor: Sensor? = null
     private lateinit var sensorManager: SensorManager
 
-
-    val sensorEventListener: SensorEventListener = object : SensorEventListener {
-        override fun onSensorChanged(event: SensorEvent?) {
-            //TODO("Not yet implemented")
-            // In this example, alpha is calculated as t / (t + dT),
-            // where t is the low-pass filter's time-constant and
-            // dT is the event delivery rate.
-
-
-        }
-
-        override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-            //TODO("Not yet implemented")
-        }
-
-    }
 
     lateinit var miViewDibujado: MiViewDibujado
 
@@ -107,22 +91,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onPause() {
         super.onPause()
-        sensorManager.unregisterListener(this)
         sensorManager.unregisterListener(miViewDibujado)
     }
 
-    override fun onSensorChanged(p0: SensorEvent?) {
-        //TODO("Not yet implemented")
-
-    }
-
-    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-        //TODO("Not yet implemented")
-    }
 
     override fun onDestroy() {
         super.onDestroy()
-        sensorManager.unregisterListener(sensorEventListener)
+        sensorManager.unregisterListener(miViewDibujado)
     }
 
 }
@@ -202,14 +177,14 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
     }
 
     fun updateX() {
-        if (xPos < ancho!! - radio * 2 && xPos > 0 + radio * 2) {
+        if (xPos < ancho!! - radio && xPos > 0 + radio) {
             xVelocity -= xAcceleration * 3f
             xPos += xVelocity
-        } else if (xPos >= ancho!! - radio * 2) {
+        } else if (xPos >= ancho!! - radio) {
             xPos = ancho!! - radio * 2 + 1
             xVelocity -= xAcceleration * 3f
             xPos += xVelocity
-        } else if (xPos <= 0 + radio * 2) {
+        } else if (xPos <= 0 + radio) {
             xPos = radio * 2 + 1
             xVelocity -= xAcceleration * 3f
             xPos += xVelocity
@@ -217,15 +192,15 @@ class MiViewDibujado(ctx: Context) : View(ctx), SensorEventListener {
     }
 
     fun updateY() {
-        if (yPos < altura!! - radio * 2 && yPos > 0 + radio * 2) {
+        if (yPos < altura!! - radio && yPos > 0 + radio) {
             yVelocity -= yAcceleration * 3f
             yPos += yVelocity
-        } else if (yPos >= altura!! - radio * 2) {
-            yPos = altura!! - radio * 2 + 1
+        } else if (yPos >= altura!! - radio) {
+            yPos = altura!! - radio * 3 + 50f
             yVelocity -= yAcceleration * 3f
             yPos += yVelocity
-        } else if (yPos <= 0 + radio * 2) {
-            yPos = radio * 2 + 1
+        } else if (yPos <= 0 + radio) {
+            yPos = radio * 3 + 50f
             yVelocity -= yAcceleration * 3f
             yPos += yVelocity
         }
